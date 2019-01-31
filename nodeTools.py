@@ -1,16 +1,12 @@
 keywordDict = {}
 
 class Edge(object):
-    
     def __init__(self, node, weight = 1):
         self.weight = weight
         self.node = node
 
 class Node(object):
-
-    def __init__(self, name, isKeyword = False, weight = 0):
-        if isKeyword:
-            keywordDict.append({name: self})
+    def __init__(self, name, weight = 0):
         self.weight = weight
         self.name = name
         self.edges = []
@@ -18,24 +14,23 @@ class Node(object):
     def connect(self, node, edgeWeight):
         self.edges.append(Edge(node, edgeWeight))
 
-def connectKeywordsToMethod(keywords, counts, node):
+def connectKeywordsToNode(keywords, counts, node):
     createdNodes = []
     for entry in zip(keywords, counts):
-        newNode = Node(entry[0], True)   # create new node for every keyword
+        newNode = Node(entry[0])   # create new node for every keyword
+        keywordDict.append({entry[0]: newNode})
         newNode.connect(node, entry[1])  # connect keyword to method and assign count as edge weight
         createdNodes.append(newNode)
     return createdNodes
 
-def connectMedthodsToClass(methodNames, classNode):
-    edgeWeight = 1 / len(methodNames)
-    for name in methodNames:
+def connectListToNode(names, node):
+    createdNodes = []
+    edgeWeight = 1 / len(names)
+    for name in names:
         newNode = Node(name)
-        newNode.connect(classNode, edgeWeight)
+        newNode.connect(node, edgeWeight)
+        createdNodes.append(newNode)
+    return createdNodes
 
-def connectClassesToRepo(classNames, repoNode):
-    edgeWeight = 1 / len(classNames)
-    for name in classNames:
-        newNode = Node(name)
-        newNode.connect(repoNode, edgeWeight)
 
 
