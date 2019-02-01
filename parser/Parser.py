@@ -6,6 +6,7 @@ import re
 import clang.cindex
 import parser.scope
 import nodeTools
+import builder
 
 def is_system_header(cursor):
     return cursor.location.file is not None and cursor.location.file.name.startswith('/usr')
@@ -86,3 +87,16 @@ class Parser:
 if __name__ == '__main__':
     p = Parser()
     p.parse_repo(sys.argv[1])
+
+    searchwords = {"distance", "Pythagorous", "D"}
+    import matcher
+    import ranker
+    matcher.matchKeyWordsToSearchWords(nodeTools.keywordDict, searchwords, verbose=True)
+    ranker.rankGraph(nodeTools.keywordDict)
+
+    # printGraph(keywordDict)
+
+    results = builder.collectResults(nodeTools.keywordDict)
+
+    for (key, value) in results:
+        print("Word: " + key + ", Rank: " + str(value))
