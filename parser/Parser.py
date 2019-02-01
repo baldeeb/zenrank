@@ -5,7 +5,7 @@ import os
 import re
 import clang.cindex
 import parser.node
-
+import nodeTools
 
 def is_system_header(cursor):
     return cursor.location.file is not None and cursor.location.file.name.startswith('/usr')
@@ -29,6 +29,15 @@ class Parser:
         for key,node in self.nodes.items():
             print (node.name(), node.keywords)
 
+        repo = nodeTools.Node('uhad_fusion')
+        classes = [node for node in self.nodes.values() if node.kind  is clang.cindex.CursorKind.CLASS_DECL]
+        klassNodes = nodeTools.connectListToNode([klass.name() for klass in classes], repo)
+        for node in klassNodes:
+            klass = self.nodes[node.name]
+            methodNames = [method.name() for method in klass.children]
+            methodNodes = nodeTools.connectListToNode(methodNames, node)
+
+
     def parse_file(self, file):
         index = clang.cindex.Index.create()
         tu = index.parse(file, ['-I/home/jashar/Code/uhad_fusion_refactor/src'])
@@ -37,6 +46,9 @@ class Parser:
     def parse_node(self, cursor, parent):
         node = parser.node.Node(parent)
         node.parse(cursor)
+
+        if parent is not None:
+            parent.children.append(node)
 
         id = node.name()
 

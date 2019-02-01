@@ -12,9 +12,11 @@ class Node:
 
     def __init__(self, parent=None):
         self.id = None
+        self.kind = None
         self.keywords = {}
         self.base_name = ''
         self.parent = parent
+        self.children = []
 
     def name(self):
         rv = ''
@@ -27,7 +29,6 @@ class Node:
             self.keywords[word] = self.keywords.get(word, 0) + 1
 
     def parse_block(self, cursor):
-        self.kind = cursor.kind
         if cursor.kind is clang.cindex.CursorKind.VAR_DECL or cursor.kind is clang.cindex.CursorKind.CALL_EXPR:
             self.add_keywords_from(cursor.spelling)
 
@@ -40,6 +41,7 @@ class Node:
 
 
     def parse(self, cursor):
+        self.kind = cursor.kind
         self.id = cursor.get_usr()
         comment = cursor.brief_comment;
         if comment is not None:
