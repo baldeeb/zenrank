@@ -1,22 +1,22 @@
-#ifndef POINT_HPP
-#define POINT_HPP
+
+#include "Test.hpp"
 
 /**
- * Key1 Key2
+ * additional comments
  */
-class Test
+void mynamespace::Test::test()
 {
+    int giveMeSomeSugar;
+    bar(0);
+}
 
-    //Key2 Key3
-    void test()
+void mynamespace::Test::bar(int a)
+{
+    switch (a)
     {
-    }
+        case 0: //!<do something
+            break;
+        default: // this should never happen
 
-    //Key 3 Key 4
-    void test(int a)
-    {
-        test();
     }
-};
-
-#endif /* POINT_HPP */
+}

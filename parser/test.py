@@ -11,7 +11,7 @@ def verbose(*args, **kwargs):
 def no_system_includes(cursor, level):
     '''filter predicate for show_ast: filter out verbose stuff from system include files'''
     return (level != 1) or (
-                cursor.location.file is not None and not cursor.location.file.name.startswith('/usr/include'))
+                cursor.location.file is not None and not cursor.location.file.name.startswith('/usr'))
 
 
 # A function show(level, *args) would have been simpler but less fun
@@ -55,7 +55,10 @@ def show_ast(cursor, filter_pred=verbose, level=Level()):
     if filter_pred(cursor, level):
         if cursor.raw_comment is not None:
             print(cursor.brief_comment)
-        level.show(cursor.kind, cursor.spelling, cursor.displayname, cursor.location)
+        comment = ''
+        if cursor.raw_comment is not None:
+            comment = cursor.raw_comment
+        level.show(cursor.kind, cursor.spelling, cursor.displayname, comment, cursor.location)
         if is_valid_type(cursor.type):
             show_type(cursor.type, level + 1, 'type:')
             show_type(cursor.type.get_canonical(), level + 1, 'canonical type:')
@@ -66,10 +69,10 @@ def show_ast(cursor, filter_pred=verbose, level=Level()):
 if __name__ == '__main__':
     print('In main')
     index = clang.cindex.Index.create()
-    tu = index.parse(sys.argv[1])
+    tu = index.parse(sys.argv[1], ['-I/home/jashar/Code/had/uhad_fusion/modules/event/include'])
     print(
     'Translation unit:', tu.spelling)
     for f in tu.get_includes():
         print(
         '\t' * f.depth, f.include.name)
-    show_ast(tu.cursor, no_system_includes)
+    show_ast(tu.cursor, verbose)
