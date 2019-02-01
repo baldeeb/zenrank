@@ -14,7 +14,6 @@ def is_system_header(cursor):
 class Parser:
 
     def __init__(self):
-        self.repos = [];
         self.nodes = {};
 
     def parse_repo(self, repo_folder):
@@ -26,9 +25,9 @@ class Parser:
         for file in result:
             print(file)
             self.parse_file(file)
-            for id, method in self.nodes.items():
-                print(method.name(), method.keywords)
 
+        for key,node in self.nodes.items():
+            print (node.name(), node.keywords)
 
     def parse_file(self, file):
         index = clang.cindex.Index.create()
