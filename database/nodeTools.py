@@ -34,3 +34,5 @@ def connectListToNode(names, node):
 
 
 
+if __name__=="__main__":
+    
