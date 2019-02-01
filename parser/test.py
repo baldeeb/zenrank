@@ -58,7 +58,7 @@ def show_ast(cursor, filter_pred=verbose, level=Level()):
         comment = ''
         if cursor.raw_comment is not None:
             comment = cursor.raw_comment
-        level.show(cursor.kind, cursor.spelling, cursor.displayname, comment, cursor.location)
+        level.show(cursor.kind, cursor.spelling, cursor.displayname, comment, cursor.get_usr(), cursor.location)
         if is_valid_type(cursor.type):
             show_type(cursor.type, level + 1, 'type:')
             show_type(cursor.type.get_canonical(), level + 1, 'canonical type:')
@@ -75,4 +75,4 @@ if __name__ == '__main__':
     for f in tu.get_includes():
         print(
         '\t' * f.depth, f.include.name)
-    show_ast(tu.cursor, verbose)
+    show_ast(tu.cursor, no_system_includes)
