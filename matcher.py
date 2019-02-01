@@ -1,6 +1,7 @@
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
 from decimal import *
+from nodeTools import Node
 
 def getWeight(keyTerm, searchTerms, merge = "or"):
     if merge == "and": 
@@ -22,26 +23,27 @@ def cleanSearchSet(searchSet):
             newSearchSet.add(sword) 
     return newSearchSet
 
-def matchKeyWordsToSearchWords(kwDict, swSet):
+def matchKeyWordsToSearchWords(kwDict, swSet, verbose = False):
     swSet = cleanSearchSet(swSet)
 
     for kw, kwNode in kwDict.items():
-        kwNode.weight = getWeight(kw, swSet, "and")
-        print("Key Word \"" + kword + "\" has score: " + str(score))    
+        kwNode.weight = getWeight(kw, swSet)
+
+        if verbose is True:
+            print("Key Word \"" + kword + "\" has score: " + str(score))
 
 if __name__=="__main__":
     keywords = {
-                    "Distance", "dist", "distance",
-                    "pythagorous", "pyth", "triangle", 
-                    "apple", "add", "dist_Pythagorous"
-                }
+        "Distance"          : Node("node1"), 
+        "dist"              : Node("node2"), 
+        "distance"          : Node("node3"),
+        "pythagorous"       : Node("node4"), 
+        "pyth"              : Node("node5"),
+        "triangle"          : Node("node6"),
+        "apple"             : Node("node7"),
+        "add"               : Node("node8"),
+        "dist_Pythagorous"  : Node("node9")
+    }
     searchwords = {"distance", "Pythagorous", "D"}
 
-    newSearchWords = set()
-    for sword in searchwords:
-        if len(sword) > 2: 
-            newSearchWords.add(sword) 
-
-    for kword in keywords:
-        score = getWeight(kword, newSearchWords, "and")
-        print("    key word \"" + kword + "\" has score: " + str(score))
+    matchKeyWordsToSearchWords(keywords, searchwords)

@@ -47,42 +47,43 @@ def printGraph(kwDict):
     for kw, kwNode in kwDict.items():
         print("kw: " + kw + " -- " + str(kwNode.weight))
         for kwEdge in kwNode.edges:
-            print("    -" + str(kwEdge.weight) + "--> " + kwEdge.node.name)
+            print("    -" + str(kwEdge.weight) + "--> " + kwEdge.node.name + " -- " + str(kwEdge.node.weight))
             for childEdge in kwEdge.node.edges:
-                print("        -" + str(childEdge.weight) + "--> " + childEdge.node.name)
+                print("        -" + str(childEdge.weight) + "--> " + childEdge.node.name + " -- " + str(childEdge.node.weight))
                 for infantEdge in childEdge.node.edges:
-                    print("            -" + str(infantEdge.weight) + "--> " + infantEdge.node.name)
+                    print("            -" + str(infantEdge.weight) + "--> " + infantEdge.node.name + " -- " + str(infantEdge.node.weight))
                     if len(infantEdge.node.edges):
                         "      Infant has edges..."
 
 
 if __name__=="__main__":
-    repo = { "class1": {
-                        "m0":{
-                                "distance": 2 , 
-                                "Add": 1
-                            } ,
-                        "m1":{
-                                "distance": 1, 
-                                "get": 2
-                            }
-                        } ,
-             "class2": 
-                        {"m2":{
-                                "ParticleFilter": 1
-                              }
-                        },
-             "class3": 
-                        {"m3,":{
-                                "convertUnit": 1
-                                }
-                        },
-             "class4": 
-                        {"m4":{
-                               "static": 3
-                              }
-                        }
+    repo = { 
+        "class1": {
+            "m0":{
+                "distance": 2 , 
+                "Add": 1
+            } ,
+            "m1":{
+                "distance": 1, 
+                "get": 2
             }
+        } ,
+        "class2":{
+            "m2":{
+                "ParticleFilter": 1
+            }
+        },
+        "class3":{
+            "m3,":{
+                "convertUnit": 1
+            }
+        },
+        "class4":{
+            "m4":{
+                "static": 3
+            }
+        }
+    }
 
     repoNodes = Node("repo",0)
     
