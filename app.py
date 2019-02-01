@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, redirect, url_for
 app =  Flask(__name__)
 
 def output(data):
-      return [data]
+      return data
 
 @app.route('/')
 def webhomePage(data):
