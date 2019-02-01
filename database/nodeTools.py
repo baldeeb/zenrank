@@ -1,3 +1,6 @@
+from decimal import *
+
+
 keywordDict = {}
 
 class Edge(object):
@@ -17,15 +20,19 @@ class Node(object):
 def connectKeywordsToNode(keywords, counts, node):
     createdNodes = []
     for entry in zip(keywords, counts):
-        newNode = Node(entry[0])   # create new node for every keyword
-        keywordDict.append({entry[0]: newNode})
+        if entry[0] in keywordDict.keys():
+            newNode = keywordDict[entry[0]]
+        else:
+            newNode = Node(entry[0])   # create new node for every keyword
+            keywordDict[entry[0]] = newNode
+            createdNodes.append(newNode)
+        
         newNode.connect(node, entry[1])  # connect keyword to method and assign count as edge weight
-        createdNodes.append(newNode)
     return createdNodes
 
 def connectListToNode(names, node):
     createdNodes = []
-    edgeWeight = 1 / len(names)
+    edgeWeight = Decimal(1) / Decimal(len(names))
     for name in names:
         newNode = Node(name)
         newNode.connect(node, edgeWeight)
@@ -35,4 +42,60 @@ def connectListToNode(names, node):
 
 
 if __name__=="__main__":
+    repo = { "class1": {
+                        "m0":{
+                                "distance": 2 , 
+                                "Add": 1
+                            } ,
+                        "m1":{
+                                "distance": 1, 
+                                "get": 2
+                            }
+                        } ,
+             "class2": 
+                        {"m2":{
+                                "ParticleFilter": 1
+                              }
+                        },
+             "class3": 
+                        {"m3,":{
+                                "convertUnit": 1
+                                }
+                        },
+             "class4": 
+                        {"m4":{
+                               "static": 3
+                              }
+                        }
+            }
+
+    repoNodes = Node("repo",0)
+    classNodes = connectListToNode(repo.keys(),repoNodes) 
+
+      
+    for node in classNodes:
+            
+        methodsNodes = connectListToNode( repo[node.name].keys(), node)
+
+        for method in methodsNodes:            
+            mm = connectKeywordsToNode(repo[node.name][method.name].keys(), repo[node.name][method.name].values(), method)
+            
+    
+
+    for key,value in keywordDict.iteritems():
+        print key 
+
+        for connection in value.edges:
+            print "   " + str(connection.weight) + "  " + connection.node.name
+            for c2 in connection.node.edges:
+                print "    " + str(c2.weight) + "   " + c2.node.name
+             
+
+        
+
+
+
+
+
+
     
