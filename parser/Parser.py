@@ -83,20 +83,20 @@ class Parser:
             for c in cursor.get_children():
                 self.walk_tree(c, parent)
 
-
-if __name__ == '__main__':
-    p = Parser()
-    p.parse_repo(sys.argv[1])
-
-    searchwords = {"distance", "Pythagorous", "D"}
-    import matcher
-    import ranker
-    matcher.matchKeyWordsToSearchWords(nodeTools.keywordDict, searchwords, verbose=True)
-    ranker.rankGraph(nodeTools.keywordDict)
-
-    # printGraph(keywordDict)
-
-    results = builder.collectResults(nodeTools.keywordDict)
-
-    for (key, value) in results:
-        print("Word: " + key + ", Rank: " + str(value))
+#
+# if __name__ == '__main__':
+#     p = Parser()
+#     p.parse_repo(sys.argv[1])
+#
+#     searchwords = {"distance", "Pythagorous", "D"}
+#     import matcher
+#     import ranker
+#     matcher.matchKeyWordsToSearchWords(nodeTools.keywordDict, searchwords, verbose=True)
+#     ranker.rankGraph(nodeTools.keywordDict)
+#
+#     # printGraph(keywordDict)
+#
+#     results = builder.collectResults(nodeTools.keywordDict)
+#
+#     for (key, value) in results:
+#         print("Word: " + key + ", Rank: " + str(value))
