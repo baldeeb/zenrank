@@ -1,6 +1,15 @@
 
+#include <string>
+
 namespace mynamespace
 {
+class Other
+{
+public:
+    int callMeForDistances() { return 5; }
+
+};
+
 /**
  * Key1 Key2
  */
@@ -15,6 +24,6 @@ class Test
     /**
      * Key3 Key4
      */
-    void bar(int a);
+    void test(int a, std::string name);
 };
 }

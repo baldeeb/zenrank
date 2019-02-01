@@ -4,8 +4,8 @@ import sys
 import os
 import re
 import clang.cindex
-import parser.node
-
+import parser.scope
+import nodeTools
 
 def is_system_header(cursor):
     return cursor.location.file is not None and cursor.location.file.name.startswith('/usr')
@@ -27,7 +27,28 @@ class Parser:
             self.parse_file(file)
 
         for key,node in self.nodes.items():
-            print (node.name(), node.keywords)
+            print (node.name(), node.use_count, node.keywords)
+
+        repo = nodeTools.Node('uhad_fusion')
+        classes = [node for node in self.nodes.values() if node.kind  is clang.cindex.CursorKind.CLASS_DECL]
+        classNames = [klass.name() for klass in classes]
+        klassNodes = nodeTools.connectListToNode(classNames, repo)
+        for node in klassNodes:
+            klass = self.nodes[node.name]
+            node.baseWeight = klass.use_count
+            nodeTools.connectKeywordsToNode(klass.keywords, node)
+
+            if len(klass.children) > 0:
+                methodNames = [method.name() for method in klass.children]
+                methodNodes = nodeTools.connectListToNode(methodNames, node)
+
+                for methodNode in methodNodes:
+                    method = self.nodes[methodNode.name]
+                    methodNode.baseWeight = method.use_count
+                    nodeTools.connectKeywordsToNode(method.keywords, methodNode)
+
+        nodeTools.printGraph(nodeTools.keywordDict)
+
 
     def parse_file(self, file):
         index = clang.cindex.Index.create()
@@ -35,8 +56,11 @@ class Parser:
         self.walk_tree(tu.cursor);
 
     def parse_node(self, cursor, parent):
-        node = parser.node.Node(parent)
-        node.parse(cursor)
+        node = parser.scope.Scope(parent)
+        node.parse(self.nodes, cursor)
+
+        if parent is not None:
+            parent.children.append(node)
 
         id = node.name()
 
@@ -50,7 +74,7 @@ class Parser:
 
     def walk_tree(self, cursor, parent=None):
         parse_children = True
-        if parser.node.is_node(cursor) and not is_system_header(cursor):
+        if parser.scope.is_node(cursor) and not is_system_header(cursor):
             self.parse_node(cursor, parent)
             parse_children = False
 

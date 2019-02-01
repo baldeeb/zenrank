@@ -9,10 +9,15 @@ using namespace mynamespace;
 void mynamespace::Test::test()
 {
     int giveMeSomeSugar;
-    bar(0);
+    std::string bob;
+    test(0, bob);
+
+    test(giveMeSomeSugar, "");
+    Other o;
+    o.callMeForDistances();
 }
 
-void Test::bar(int a)
+void Test::test(int a, std::string name)
 {
     switch (a)
     {
