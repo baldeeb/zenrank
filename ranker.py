@@ -8,7 +8,7 @@ def updateWeight(node, parentWeight):
         # print(node.name + " --> " + edge.node.name + "")
         updateWeight(edge.node, node.baseWeight * edge.weight * parentWeight)
     # print("> " + node.name + " <")
-    node.weight = node.weight + parentWeight
+    node.weight = node.weight + (node.baseWeight * parentWeight)
 
 def rankGraph(kwDict):
     for kw, kwNode in kwDict.items():

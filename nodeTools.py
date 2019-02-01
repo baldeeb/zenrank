@@ -1,6 +1,7 @@
 from decimal import *
 
 keywordDict = {}
+resultsDict = {}
 
 class Edge(object):
     def __init__(self, node, weight = 1):
@@ -8,11 +9,11 @@ class Edge(object):
         self.node = node
 
 class Node(object):
-    def __init__(self, name, weight = 0):
-        self.weight = weight
+    def __init__(self, name, baseWeight = 1):
+        self.weight = 0
         self.name = name
         self.edges = []
-        self.baseWeight = 1
+        self.baseWeight = baseWeight
 
     def connect(self, node, edgeWeight):
         self.edges.append(Edge(node, edgeWeight))
@@ -39,10 +40,6 @@ def connectListToNode(names, node):
         createdNodes.append(newNode)
     return createdNodes
 
-
-
-
-
 def printGraph(kwDict):
     for kw, kwNode in kwDict.items():
         print("kw: " + kw + " -- " + str(kwNode.weight))
@@ -64,7 +61,6 @@ if __name__=="__main__":
                 "Add": 1
             } ,
             "m1":{
-                "distance": 1, 
                 "get": 2
             }
         } ,
@@ -72,20 +68,10 @@ if __name__=="__main__":
             "m2":{
                 "ParticleFilter": 1
             }
-        },
-        "class3":{
-            "m3,":{
-                "convertUnit": 1
-            }
-        },
-        "class4":{
-            "m4":{
-                "static": 3
-            }
         }
     }
 
-    repoNodes = Node("repo",0)
+    repoNodes = Node("repo")
     
     classNodes = connectListToNode(repo.keys(),repoNodes) 
       

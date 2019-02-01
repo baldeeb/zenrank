@@ -3,6 +3,10 @@ from fuzzywuzzy import process
 from decimal import *
 from nodeTools import Node
 
+
+# from nltk.corpus import wordnet
+# from nltk.corpus import wordnet as wn
+
 def getWeight(keyTerm, searchTerms, merge = "or"):
     if merge == "and": 
         score = Decimal(1)
@@ -10,11 +14,18 @@ def getWeight(keyTerm, searchTerms, merge = "or"):
             newScore = Decimal(fuzz.partial_ratio(keyTerm.lower().strip("_"), searchTerm.lower().strip("_"))) / Decimal(100)
             score = score * newScore
         return score * 100
+    
     elif merge == "or":
         score = 0
         for searchTerm in searchTerms:
             score = max(score, fuzz.partial_ratio(keyTerm.lower().strip("_"), searchTerm.lower().strip("_")))
         return score
+    
+    # elif merge == "WordNet":
+    #     score = 0
+    #     for searchTerm in searchTerms:
+
+    #         score = max(score, )
         
 def cleanSearchSet(searchSet):
     newSearchSet = set()
@@ -27,10 +38,10 @@ def matchKeyWordsToSearchWords(kwDict, swSet, verbose = False):
     swSet = cleanSearchSet(swSet)
 
     for kw, kwNode in kwDict.items():
-        kwNode.weight = getWeight(kw, swSet)
+        kwNode.weight = getWeight(kw, swSet, "and")
 
         if verbose is True:
-            print("Key Word \"" + kword + "\" has score: " + str(score))
+            print("Key Word \"" + kw + "\" has score: " + str(kwNode.weight))
 
 if __name__=="__main__":
     keywords = {

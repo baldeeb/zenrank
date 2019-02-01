@@ -2,6 +2,22 @@ from nodeTools import *
 from ranker import rankGraph
 from matcher import matchKeyWordsToSearchWords
 
+
+def collectResults(kwDict):
+    for kw, kwNode in kwDict.items():
+        collectChildrenResult(kwNode)
+
+    return sorted(resultsDict.items(), key=lambda x:x[1])
+
+def collectChildrenResult(node):
+    for edge in node.edges:
+        if edge.node.name not in resultsDict:
+            resultsDict[edge.node.name] = edge.node.weight
+        collectChildrenResult(edge.node)
+
+
+
+
 if __name__=="__main__":
     repo = { 
         "class1": {
@@ -36,7 +52,7 @@ if __name__=="__main__":
 
     # Construct graph
 
-    repoNodes = Node("repo",0)
+    repoNodes = Node("repo")
     
     classNodes = connectListToNode(repo.keys(),repoNodes) 
       
@@ -48,14 +64,19 @@ if __name__=="__main__":
             methodDict = nodeDict[method.name]             
             keywordNodes = connectKeywordsToNode(methodDict, method)
 
-    printGraph(keywordDict)
+    # printGraph(keywordDict)
+    # print()
 
-    print()
     print("Re-weighing graph...")
-    print()
+    
         
     # re-weigh
-    matchKeyWordsToSearchWords(keywordDict, searchwords)
+    matchKeyWordsToSearchWords(keywordDict, searchwords, verbose = True)
     rankGraph(keywordDict)
 
-    printGraph(keywordDict)
+    # printGraph(keywordDict)
+
+    results = collectResults(keywordDict)
+
+    for (key, value) in results:
+        print( "Word: " + key + ", Rank: " + str(value))
