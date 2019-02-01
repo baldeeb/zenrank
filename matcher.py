@@ -1,8 +1,8 @@
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
 from decimal import *
-def getWeight(keyTerm, searchTerms, merge = "or"):
 
+def getWeight(keyTerm, searchTerms, merge = "or"):
     if merge == "and": 
         score = Decimal(1)
         for searchTerm in searchTerms:
@@ -15,7 +15,19 @@ def getWeight(keyTerm, searchTerms, merge = "or"):
             score = max(score, fuzz.partial_ratio(keyTerm.lower().strip("_"), searchTerm.lower().strip("_")))
         return score
         
+def cleanSearchSet(searchSet):
+    newSearchSet = set()
+    for sword in searchSet:
+        if len(sword) > 2: 
+            newSearchSet.add(sword) 
+    return newSearchSet
 
+def matchKeyWordsToSearchWords(kwDict, swSet):
+    swSet = cleanSearchSet(swSet)
+
+    for kw, kwNode in kwDict.items():
+        kwNode.weight = getWeight(kw, swSet, "and")
+        print("Key Word \"" + kword + "\" has score: " + str(score))    
 
 if __name__=="__main__":
     keywords = {

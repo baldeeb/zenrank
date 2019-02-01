@@ -30,13 +30,19 @@ if __name__=="__main__":
                         }
             }
 
+
+    searchwords = {"distance", "Pythagorous", "D"}
+
+    # Construct graph
     repoNodes = Node("repo",0)
     classNodes = connectListToNode(repo.keys(),repoNodes) 
-      
     for node in classNodes:
         methodsNodes = connectListToNode( repo[node.name].keys(), node)
         for method in methodsNodes:            
             mm = connectKeywordsToNode(repo[node.name][method.name].keys(), repo[node.name][method.name].values(), method)
 
+    # re-weigh
+    
     rankGraph(keywordDict)
+
     printGraph(keywordDict)

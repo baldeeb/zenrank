@@ -17,17 +17,17 @@ class Node(object):
     def connect(self, node, edgeWeight):
         self.edges.append(Edge(node, edgeWeight))
 
-def connectKeywordsToNode(keywords, counts, node):
+def connectKeywordsToNode(keywordCountDict, node):
     createdNodes = []
-    for entry in zip(keywords, counts):
-        if entry[0] in keywordDict.keys():
-            newNode = keywordDict[entry[0]]
+    for kw, count in keywordCountDict.items():
+        if kw in keywordDict.keys():
+            newNode = keywordDict[kw]
         else:
-            newNode = Node(entry[0])   # create new node for every keyword
-            keywordDict[entry[0]] = newNode
+            newNode = Node(kw)   # create new node for every keyword
+            keywordDict[kw] = newNode
             createdNodes.append(newNode)
         
-        newNode.connect(node, entry[1])  # connect keyword to method and assign count as edge weight
+        newNode.connect(node, count)  # connect keyword to method and assign count as edge weight
     return createdNodes
 
 def connectListToNode(names, node):
@@ -45,7 +45,7 @@ def connectListToNode(names, node):
 
 def printGraph(kwDict):
     for kw, kwNode in kwDict.items():
-        print("kw: " + kw)
+        print("kw: " + kw + " -- " + kwNode.weight)
         for kwEdge in kwNode.edges:
             print("    -" + str(kwEdge.weight) + "--> " + kwEdge.node.name)
             for childEdge in kwEdge.node.edges:
@@ -84,15 +84,15 @@ if __name__=="__main__":
                         }
             }
 
-    repoNodes = Node("repo",0)
-    classNodes = connectListToNode(repo.keys(),repoNodes) 
+    # repoNodes = Node("repo",0)
+    # classNodes = connectListToNode(repo.keys(),repoNodes) 
       
-    for node in classNodes:
-        methodsNodes = connectListToNode( repo[node.name].keys(), node)
-        for method in methodsNodes:            
-            mm = connectKeywordsToNode(repo[node.name][method.name].keys(), repo[node.name][method.name].values(), method)
+    # for node in classNodes:
+    #     methodsNodes = connectListToNode( repo[node.name].keys(), node)
+    #     for method in methodsNodes:            
+    #         mm = connectKeywordsToNode(repo[node.name][method.name].keys(), repo[node.name][method.name].values(), method)
 
-    printGraph(keywordDict)
+    # printGraph(keywordDict)
         
 
 
