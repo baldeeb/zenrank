@@ -75,10 +75,11 @@ class Scope:
                 actualNode.use_count += 1
         else:
             var_name = declRefExprCursor.displayname
-            var_type = self.varNameToType[var_name]
-            for child in var_type.children:
-                if methodName in child.base_name:
-                    child.use_count += 1
+            if var_name in self.varNameToType:
+                var_type = self.varNameToType[var_name]
+                for child in var_type.children:
+                    if methodName in child.base_name:
+                        child.use_count += 1
 
 
     def parse_block(self, db, cursor):
