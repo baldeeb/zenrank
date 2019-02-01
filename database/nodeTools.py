@@ -1,6 +1,5 @@
 from decimal import *
 
-
 keywordDict = {}
 
 class Edge(object):
@@ -13,6 +12,7 @@ class Node(object):
         self.weight = weight
         self.name = name
         self.edges = []
+        self.baseWeight = 1
 
     def connect(self, node, edgeWeight):
         self.edges.append(Edge(node, edgeWeight))
@@ -39,6 +39,22 @@ def connectListToNode(names, node):
         createdNodes.append(newNode)
     return createdNodes
 
+
+
+
+
+def printGraph(kwDict):
+
+    for kw, kwNode in kwDict.items():
+        print("kw: " + kw)
+        for kwEdge in kwNode.edges:
+            print("    -" + str(kwEdge.weight) + "--> " + kwEdge.node.name)
+            for childEdge in kwEdge.node.edges:
+                print("        -" + str(childEdge.weight) + "--> " + childEdge.node.name)
+                for infantEdge in childEdge.node.edges:
+                    print("            -" + str(infantEdge.weight) + "--> " + infantEdge.node.name)
+                    if len(infantEdge.node.edges):
+                        "      Infant has edges..."
 
 
 if __name__=="__main__":
@@ -71,27 +87,15 @@ if __name__=="__main__":
 
     repoNodes = Node("repo",0)
     classNodes = connectListToNode(repo.keys(),repoNodes) 
-
       
     for node in classNodes:
-            
         methodsNodes = connectListToNode( repo[node.name].keys(), node)
-
         for method in methodsNodes:            
             mm = connectKeywordsToNode(repo[node.name][method.name].keys(), repo[node.name][method.name].values(), method)
-            
-    
 
-    for key,value in keywordDict.iteritems():
-        print key 
-
-        for connection in value.edges:
-            print "   " + str(connection.weight) + "  " + connection.node.name
-            for c2 in connection.node.edges:
-                print "    " + str(c2.weight) + "   " + c2.node.name
-             
-
+    printGraph(keywordDict)
         
+
 
 
 
