@@ -1,20 +1,27 @@
 from flask import Flask, render_template, request, redirect, url_for
 
+
 app =  Flask(__name__)
 
-@app.route('/', methods=['GET', 'POST'])
+def output(data):
+      return [data]
+
+@app.route('/')
 def main():
-	# if request.method == 'POST':
-		
+    	data1 = ['GET', 'POST' ]
+	# if request.method == 'POST':		
 	# 	return redirect(url_for('results'))
+	# return ("<p>" + "</p><p>".join(data1) + "</p>")
 
-	return render_template('index.html')
+	return render_template("output.html",  # name of template
+		number=len(data1),  # value for `number` in template
+		factors=output(data1))
 
-@app.route('/results')
-def search_results(search):
-	#the actual search action goes here
-	#return results
-	return render_template('results.html', results=results)
+# @app.route('/results')
+# def search_results(search):
+# 	#the actual search action goes here
+# 	#return results
+# 	return render_template('results.html', results=results)
 
 if __name__ == "__main__":
-	app.run(debug=True, host="0.0.0.0", port=80)
+    	app.run(debug=True)
