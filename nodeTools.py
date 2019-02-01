@@ -44,7 +44,6 @@ def connectListToNode(names, node):
 
 
 def printGraph(kwDict):
-
     for kw, kwNode in kwDict.items():
         print("kw: " + kw)
         for kwEdge in kwNode.edges:
