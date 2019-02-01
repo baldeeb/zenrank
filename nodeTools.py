@@ -45,7 +45,7 @@ def connectListToNode(names, node):
 
 def printGraph(kwDict):
     for kw, kwNode in kwDict.items():
-        print("kw: " + kw + " -- " + kwNode.weight)
+        print("kw: " + kw + " -- " + str(kwNode.weight))
         for kwEdge in kwNode.edges:
             print("    -" + str(kwEdge.weight) + "--> " + kwEdge.node.name)
             for childEdge in kwEdge.node.edges:
@@ -84,15 +84,19 @@ if __name__=="__main__":
                         }
             }
 
-    # repoNodes = Node("repo",0)
-    # classNodes = connectListToNode(repo.keys(),repoNodes) 
+    repoNodes = Node("repo",0)
+    
+    classNodes = connectListToNode(repo.keys(),repoNodes) 
       
-    # for node in classNodes:
-    #     methodsNodes = connectListToNode( repo[node.name].keys(), node)
-    #     for method in methodsNodes:            
-    #         mm = connectKeywordsToNode(repo[node.name][method.name].keys(), repo[node.name][method.name].values(), method)
+    for node in classNodes:
+        nodeDict = repo[node.name]
+        methodsNodes = connectListToNode(nodeDict.keys(), node)
+        
+        for method in methodsNodes:
+            methodDict = nodeDict[method.name]             
+            keywordNodes = connectKeywordsToNode(methodDict, method)
 
-    # printGraph(keywordDict)
+    printGraph(keywordDict)
         
 
 

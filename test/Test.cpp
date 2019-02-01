@@ -1,6 +1,8 @@
 
 #include "Test.hpp"
 
+
+using namespace mynamespace;
 /**
  * additional comments
  */
@@ -10,7 +12,7 @@ void mynamespace::Test::test()
     bar(0);
 }
 
-void mynamespace::Test::bar(int a)
+void Test::bar(int a)
 {
     switch (a)
     {

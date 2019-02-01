@@ -12,7 +12,7 @@ class Node:
 
     def __init__(self, parent=None):
         self.id = None
-        self.keywords = set()
+        self.keywords = {}
         self.base_name = ''
         self.parent = parent
 
@@ -23,9 +23,11 @@ class Node:
         return rv + self.base_name
 
     def add_keywords_from(self, text):
-        self.keywords.update(parser.keywords.find_keywords(text))
+        for word in parser.keywords.find_keywords(text):
+            self.keywords[word] = self.keywords.get(word, 0) + 1
 
     def parse_block(self, cursor):
+        self.kind = cursor.kind
         if cursor.kind is clang.cindex.CursorKind.VAR_DECL or cursor.kind is clang.cindex.CursorKind.CALL_EXPR:
             self.add_keywords_from(cursor.spelling)
 
@@ -59,7 +61,7 @@ class Node:
                 self.parent.base_name = type_name
 
 
-
     def merge_with(self, other_node):
-        self.keywords.update(other_node.keywords)
+        for key in other_node.keywords:
+            self.keywords[key] = self.keywords.get(key,0) + other_node.keywords[key]
 
