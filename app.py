@@ -7,15 +7,15 @@ def output(data):
       return [data]
 
 @app.route('/')
-def main():
-    	data1 = ['GET', 'POST' ]
+def webhomePage(data):
+    	# data = ['GET', 'POST' ]
 	# if request.method == 'POST':		
 	# 	return redirect(url_for('results'))
 	# return ("<p>" + "</p><p>".join(data1) + "</p>")
 
 	return render_template("output.html",  # name of template
-		number=len(data1),  # value for `number` in template
-		factors=output(data1))
+		number=len(data),  # value for `number` in template
+		factors=output(data))
 
 # @app.route('/results')
 # def search_results(search):
